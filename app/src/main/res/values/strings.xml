@@ -4,4 +4,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="text_add">添加</string>
+    <string name="template_rsd_results">RSD: %.6f%%, SD:%.6f, AVG: %.6f</string>
 </resources>

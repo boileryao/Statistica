@@ -7,16 +7,23 @@
 
     <TextView
         android:id="@+id/tvRsd"
+        style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        tools:text="RSD: 0.12%, SD:4.22, AVG: 3.445" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNumbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/etNumber"
+        android:layout_below="@id/tvRsd"
         android:layout_marginTop="16dp"
         android:background="@color/white_84"
+        app:reverseLayout="true"
         tools:itemCount="3"
         tools:listitem="@layout/layout_item_number" />
 
@@ -31,7 +38,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:layout_toStartOf="@id/btnAppend"
-        android:ems="10"
         android:fontFamily="sans-serif-condensed"
         android:importantForAutofill="no"
         tools:ignore="LabelFor,TextFields" />

@@ -5,30 +5,21 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.boileryao.statistica.EditableRecyclerAdapter
 import com.boileryao.statistica.R
+import com.boileryao.statistica.math.average
 import com.boileryao.statistica.math.rsd
+import com.boileryao.statistica.math.sd
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment() {
 
     private var homeViewModel = HomeViewModel()
     private lateinit var recyclerAdapter: EditableRecyclerAdapter
-
-    override fun onResume() {
-        super.onResume()
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,15 +49,23 @@ class HomeFragment : Fragment() {
         content.btnAppend.setOnClickListener {
             val numberText = content.etNumber.text.toString()
             homeViewModel.numbers.add(numberText.toDoubleOrNull() ?: return@setOnClickListener)
-            recyclerAdapter.notifyItemInserted(homeViewModel.numbers.size - 1)
+
+            val lastItemPosition = homeViewModel.numbers.size - 1
+            recyclerAdapter.notifyItemInserted(lastItemPosition)
+            content.rvNumbers.scrollToPosition(lastItemPosition)
+
             content.etNumber.setText("")
-        }
-        content.btnAppend.setOnLongClickListener {
-            val rsd = rsd(homeViewModel.numbers.toDoubleArray())
-            Toast.makeText(context, rsd.toString(), Toast.LENGTH_LONG).show()
-            true
+            updateCalcResult(homeViewModel.numbers.toDoubleArray())
         }
         return content
+    }
+
+    private fun updateCalcResult(nums: DoubleArray) {
+        val rsdInPercent = rsd(nums) * 100
+        val sd = sd(nums)
+        val avg = average(nums)
+        val rsdResult = context?.getString(R.string.template_rsd_results, rsdInPercent, sd, avg)
+        tvRsd.text = rsdResult
     }
 
     companion object {
